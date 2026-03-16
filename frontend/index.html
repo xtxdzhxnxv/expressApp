@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1st Database</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Orbitron:wght@400;700&display=swap');
+
+        :root {
+            --primary: #8a2be2;
+            --accent: #c300ff;
+            --bg-dark: #050510;
+            --glass: rgba(20, 20, 35, 0.65);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--bg-dark);
+            font-family: 'Fira Code', monospace;
+            overflow: hidden;
+            color: #e0e0e0;
+        }
+
+        /* Живой анимированный фон */
+        .bg-animate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, #712281 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, #941d70 0%, transparent 40%),
+                        radial-gradient(circle at 50% 50%, #050510 0%, #000 100%);
+            z-index: -1;
+            animation: bgShift 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Основной контейнер */
+        .terminal-card {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            background: var(--glass);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), 
+                        inset 0 0 20px rgba(138, 43, 226, 0.2);
+            overflow: hidden;
+        }
+
+        /* Полоса сканирования */
+        .terminal-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(138, 43, 226, 0.1), transparent);
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Монитор данных */
+        .display-area {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            height: 150px;
+            overflow-y: scroll;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #00f2ff;
+        }
+
+        /* Большое поле для ввода объектов (Textarea) */
+        .json-input {
+            width: 100%;
+            min-height: 60px; /* Можно растягивать */
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            color: #ff79c6; /* Цвет как в Dracula Theme */
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            resize: vertical; /* Позволяет пользователю менять размер по высоте */
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .json-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        /* Кнопки */
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .cyber-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-fetch {
+            background: transparent;
+            border: 1px solid #00f2ff;
+            color: #00f2ff;
+        }
+
+        .btn-send {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: 1px solid #ff559c;
+            color: #ff559c;
+        }
+
+        .btn-update {
+            background: transparent;
+            border: 1px solid #50fa7b;
+            color: #50fa7b;
+        }
+
+        .cyber-btn:hover {
+            letter-spacing: 1px;
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(0, 242, 255, 0.4);
+        }
+
+        .login{
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0000009c;
+            z-index: 100;
+        }
+        .login-container{
+            position: absolute;
+            width: 300px;
+            padding: 30px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 101;
+        }
+
+        .loginInput{
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .signup-container{
+           position: absolute;
+            width: 300px;
+            padding: 30px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 101;
+        }
+
+        /* Скроллбар */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+    </style>
+</head>
+<body>
+    <div class="login"></div>
+    <div class="login-container" style="display: flex;">
+        <h1>Welcome</h1>
+        <h2>Login</h2>
+        <input type="text" id="email" placeholder="Email" class="loginInput" >
+        <input type="password" id="password" placeholder="Password" class="loginInput">
+        <button id="loginBtn" class="cyber-btn">sign in</button>
+        <p>Haven't registered yet?</p>
+        <button id="toSignupBtn" class="cyber-btn">Sign up</button>
+    </div>
+    <div class="signup-container" style="display: none;">
+        <h1>Welcome</h1>
+        <h2>Sign Up</h2>
+        <input type="text" id="signupEmail" placeholder="Email" class="loginInput">
+        <input type="password" id="signupPassword" placeholder="Password" class="loginInput">
+        <button id="registerBtn" class="cyber-btn">Register</button>
+        <p>Already have an account?</p>
+        <button id="toLoginBtn" class="cyber-btn">Back to Login</button>
+    </div>
+
+    <div class="bg-animate"></div>
+
+    <div class="terminal-card">
+        <h1>Hellooooo</h1>
+        
+        <div class="display-area" id="console">
+            <span style="color: #6272a4;">// [System info]: Connected to local_node...</span><br>
+            <span style="color: #50fa7b;">> Status: 200 OK</span>
+        </div>
+
+        <input class="json-input" id="dataInput" placeholder='write name there'></input>
+        <input class="json-input" id="messageInput" placeholder='write message there'></input>
+        <input class="json-input" id="idInput" placeholder='write id there for delete or update'></input>
+        
+        <div class="btn-group">
+            <button class="cyber-btn btn-fetch">GET_DATA</button>
+            <button class="cyber-btn btn-send">POST_DATA</button>
+            <button class="cyber-btn btn-delete">DELETE_DATA</button>
+            <button class="cyber-btn btn-update">PATCH_DATA</button>
+        </div>
+    </div>
+
+    
+    <script src="script.js"></script>
+</body>
+</html>
