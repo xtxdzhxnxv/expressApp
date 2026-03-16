@@ -15,7 +15,7 @@ const registerBtn = document.getElementById('registerBtn');
 const signupPassword = document.getElementById('signupPassword');
 const signupEmail = document.getElementById('signupEmail');
 
-
+const API_URL = "https://expressapp-jpi3.onrender.com";
 
 
 // Обработчик для кнопки GET_DATA
@@ -25,7 +25,7 @@ btnFetch.addEventListener('click',  async () => {
         consoleOutput.innerHTML += `<span style="color: #ff5555;">// [Error]: No auth token. Log in first.</span><br>`;
         return;
     }
-    await fetch('http://localhost:3000/contacts', {
+    await fetch('https://expressapp-jpi3.onrender.com/contacts', {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` }
     })
@@ -57,7 +57,7 @@ btnSend.addEventListener('click', async () => {
         consoleOutput.innerHTML += `<span style="color: #ff5555;">// [Error]: Input cannot be empty</span><br>`;
         return;
     }
-    await fetch('http://localhost:3000/contacts', {
+    await fetch('https://expressapp-jpi3.onrender.com/contacts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ name: inputData, message: inputDataMSG.value }) // Пример данных, можно расширить
@@ -90,7 +90,7 @@ btnDelete.addEventListener('click', async () => {
         consoleOutput.innerHTML += `<span style="color: #ff5555;">// [Error]: ID input cannot be empty</span><br>`;
         return;
     }
-    await fetch(`http://localhost:3000/contacts/${idInput.value.trim()}`, {
+    await fetch(`https://expressapp-jpi3.onrender.com/contacts/${idInput.value.trim()}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
     } )
@@ -124,7 +124,7 @@ btnUpdate.addEventListener('click', async () => {
         name: dataInput.value.trim() || undefined, // Если поле пустое, не отправляем его
         message: inputDataMSG.value.trim() || undefined // Если поле пустое, не отправляем его
     };
-    await fetch(`http://localhost:3000/contacts/${idInput.value.trim()}`, {
+    await fetch(`https://expressapp-jpi3.onrender.com/contacts/${idInput.value.trim()}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(updatedData),
@@ -153,7 +153,7 @@ btnUpdate.addEventListener('click', async () => {
 loginBtn.addEventListener('click', async () => {
     if (emailInput.value.trim() && passwordInput.value.trim()) {
     
-    await fetch('http://localhost:3000/login', {
+    await fetch('https://expressapp-jpi3.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailInput.value.trim(), password: passwordInput.value.trim() })
@@ -174,7 +174,7 @@ loginBtn.addEventListener('click', async () => {
 
 registerBtn.addEventListener('click', async () => {
     if (signupEmail.value.trim() && signupPassword.value.trim()) {
-        await fetch('http://localhost:3000/register', {
+        await fetch('https://expressapp-jpi3.onrender.com/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: signupEmail.value.trim(), password: signupPassword.value.trim() })
